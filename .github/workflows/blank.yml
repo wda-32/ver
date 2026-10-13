@@ -5,8 +5,11 @@ on:
 
 jobs:
   secure-rdp:
+    # Standard GitHub-hosted Windows runner.
+    # Public repository: 4 vCPUs / 16 GB RAM; private: 2 vCPUs / 8 GB RAM.
+    # GitHub selects the region; an India location cannot be requested here.
     runs-on: windows-latest
-    timeout-minutes: 3600
+    timeout-minutes: 360
 
     steps:
       - name: Configure Core RDP Settings
@@ -106,7 +109,7 @@ jobs:
           Write-Host "Password: $(echo $env:RDP_CREDS)"
           Write-Host "==================`n"
           
-          # Keep runner active indefinitely (or until manually cancelled)
+          # Keep the session active until cancellation or the six-hour job timeout
           while ($true) {
               Write-Host "[$(Get-Date)] RDP Active - Use Ctrl+C in workflow to terminate"
               Start-Sleep -Seconds 300
